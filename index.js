@@ -1,7 +1,6 @@
 
 const body = document.querySelector("body")
 const playBtn = document.querySelector("#play-btn");
-playBtn.addEventListener('click', play);
 let answMsg = document.querySelector('#answer-msg');
 const answerForm = document.querySelector("#pkmn-form");
 const yourPkmnBtn = document.querySelector("#yourPkmn-btn");
@@ -14,25 +13,28 @@ let bestWinStreak = 0
 let currWinStreak = 0
 const winDiv = document.querySelector("#best-streak")
 
+//function to fetch orig. pkmn data 
 function play(){
     answerForm.classList.remove('hidden')
     playBtn.classList.add("hidden")
     answMsg.classList.add('hidden')
-    ///////reset right and wrong after each answer //////////
+   //reset right and wrong after each answer 
     answMsg.classList.remove('right', 'wrong')
     seeYourList.classList.add('hidden')
     yourPkmnModal.classList.add('hidden')
-
+    //create random id to get random pkmn
     const randPkmnId = Math.floor(Math.random() * 898) +1;
     currPkmnId = randPkmnId;
-    //const randPkmnId = 718;
     fetch(`https://pokeapi.co/api/v2/pokemon/${randPkmnId}`)
     .then(res => res.json())
     .then(pkmn => playGame(pkmn))
 }
 
+//start game - push play btn
+playBtn.addEventListener('click', play);
+
 function playGame(pkmn){
-    let pkmnName = pkmn.name
+    
     const pkmnImg = document.querySelector("#pokemon-img")
     pkmnImg.src = pkmn.sprites.other['official-artwork']['front_default']
 
@@ -86,7 +88,7 @@ function playGame(pkmn){
     })
     liBst.textContent = "BST: " + bst;
 
-    //console.log(pkmnName)
+    console.log(pkmn.name)
 
     //Event Listener - Answer Form
     answerForm.addEventListener('submit', handleAnswer);
@@ -96,7 +98,7 @@ function playGame(pkmn){
     const handleAnswer = (e) => {
         
         e.preventDefault();
-
+        //separate fetch for simplified pkmn names 
         fetch(`https://pokeapi.co/api/v2/pokemon-species/${currPkmnId}`)
         .then(res => res.json())
         .then(newPkmn => {
@@ -104,7 +106,6 @@ function playGame(pkmn){
             let realAnswer = '';
             realAnswer = newPkmn.name.replace('-', '')
             let newAnswer = e.target.name.value.toLowerCase()
-            // console.log(realAnswer + ` ` + newAnswer)
     
             answerForm.classList.add('hidden')
             playBtn.classList.remove('hidden')
@@ -115,27 +116,19 @@ function playGame(pkmn){
 
             if(newAnswer === realAnswer){
                 rightAnswerMsg();
+                //new fetch for pkmn images
                 fetch(`https://pokeapi.co/api/v2/pokemon/${currPkmnId}`)
                 .then(res => res.json())
                 .then(pkmn => { 
-                    let sprite = pkmn.sprites['front_default']
-                   
-                    //push correct name/id to db.json
-                    let realAnsData = {
-                        sprite: sprite,
-                        name: realAnswer,
-                        id: currPkmnId,
-                    }
-                
-                sendPkmnInfo('http://localhost:3000/pokemon', realAnsData)
+                    fillPkmnList(pkmn)
                 })
 
             } else {
                 wrongAnswerMsg()
                 seeYourList.classList.remove('hidden');
-                //GET req. from API
-                getCorrectPkmn('http://localhost:3000/pokemon');
+             
             } 
+
             answerForm.reset()    
         })
     }
@@ -159,42 +152,16 @@ function playGame(pkmn){
         answMsg.classList.remove('hidden');
     }
 
-
-// //POST REQUEST to send right pkmn answer info to db.json
-function sendPkmnInfo(url, data){
-    fetch(url, {
-        method: 'POST',
-           headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(data),
-    })
-    .then(res => res.json())
-    .catch(console.error)
-
-}
-
-//GET req to db.json to fill pkmn List
-function getCorrectPkmn(url){
-    fetch(url)
-    .then(res => res.json())
-    .then(pkmArr => {
-        yourPkmnList.innerHTML = ''
-        pkmArr.forEach(pkmn => fillPkmnList(pkmn))
-    }) 
-
-}
-
-//fill pkmn list w/ results from db.json
+//fill pkmn box w/ correct answers
 function fillPkmnList(pkmn){
-    const img = document.createElement('img');
-    img.src = pkmn.sprite;
+    const img = document.createElement('img')
+    img.src = pkmn.sprites['front_default']
     const imgCapt = document.createElement('figcaption')
     imgCapt.textContent = pkmn.name
     imgCapt.classList.add('img-capt')
     const singPkmnDiv = document.createElement('div');
     singPkmnDiv.append(img, imgCapt)
-   yourPkmnList.append(singPkmnDiv)
+    yourPkmnList.append(singPkmnDiv)
 }
 
 //open your pkmn

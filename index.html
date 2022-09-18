@@ -51,7 +51,8 @@
              <form class="hidden"id="pkmn-form">
           
                 <label for="user-input">Enter your guess:</label>
-                <input autocomplete="off" type="text" id="user-input" name="name" placeholder="pokemon...">
+                <input autocomplete="off" type="text" id="user-input" name="name" placeholder="pokemon..." required  oninvalid="this.setCustomValidity('Enter Answer Here')"
+                oninput="this.setCustomValidity('')">
                 <input id="submit-btn" type="submit" value="Submit"/>
             </form>
             <!-- dynamically change and show/hide message based on user answer -->
