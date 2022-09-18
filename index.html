@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <!-- free-fonts -->
+    <link href="http://fonts.cdnfonts.com/css/pok" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <script defer src="index.js"></script>
+    <title>Who's That Pokemon?!</title>
+</head>
+<body>
+    <div class="content-container">
+        <h1>Who's That Pokemon?!</h1>
+        <button id="play-btn">Play</button>
+        <div class="pokemon-content">
+            <div id="win-streak">
+            <div id="best-streak">Best Win Streak: 0</div>
+            <div id="curr-streak">Current Streak: 0</div>
+        </div>
+            <img src="images/pokeballbadqmark2.png" id="pokemon-img"></img>
+            <div id="pokemon-info">
+                <ul id="info-list">
+                    <!-- dynamically creat this ul w/ JS -->
+                    <li id="name">Name</li>
+                    <li id="type">Type:</li>
+                    <li id="gen">Generation</li>
+                    <li id="ability">Ability</li>
+                    <div id ="pkmn-stats">
+                    <li id="stats">Stats
+                        <ul id="stat-list">
+                            <li id="hp">HP: </li>
+                            <li id="att">Attack: </li>
+                            <li id="defense">Defense:</li>
+                            <li id="spa">Special Attack: </li>
+                            <li id="spd">Special Defense: </li>
+                            <li id="speed">Speed: </li>
+                        </ul>
+                    </li>
+                    <li id="bst">BST: </li>
+                </div>
+                </ul>
+            </div>
+        </div>
+        <div id="user-input-section">
+             <form class="hidden"id="pkmn-form">
+          
+                <label for="user-input">Enter your guess:</label>
+                <input autocomplete="off" type="text" id="user-input" name="name" placeholder="pokemon...">
+                <input id="submit-btn" type="submit" value="Submit"/>
+            </form>
+            <!-- dynamically change and show/hide message based on user answer -->
+            <p class="hidden" id="answer-msg">Message to user w/ wrong or correct</p>
+            <div class ="hidden" id="see-list">
+                <p>See what pokemon you guessed right!</p>
+                <button id="yourPkmn-btn">Your Pokemon</button>
+            </div>
+                <div id="modal" class="hidden">
+                    <div id="pkmn-list">
+                    </div>
+        
+                </div>
+      
+        </div>
+
+
+    </div>
+    <div class="overlay hidden"></div>
+    
+</body>
+
+</html>
